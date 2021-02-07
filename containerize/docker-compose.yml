@@ -1,0 +1,8 @@
+version: "3"
+services:
+  app:
+    container_name: containerize_app_1
+    # your code goes here ...
+  nginx:
+    container_name: containerize_nginx_1
+    # your code goes here ...
