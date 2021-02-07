@@ -3,15 +3,15 @@ import URI from 'urijs';
 
 window.path = 'http://localhost:3000/records';
 
-// Main Function
+// Main Retrieve Function
 const retrieve = (options) => {
 
   if (options === undefined) {
     options = {};
   };
 
-  // Call query_string
-  let queryString = query_string(options, path).toString();
+  // Call queryStringHelper
+  let queryString = queryStringHelper(options, path).toString();
   return fetch(query).then(response => {
     let json = response.json();
     if (response.ok) {
@@ -20,13 +20,13 @@ const retrieve = (options) => {
       return json.then(Promise.reject.bind(Promise));
     }
   })
-  // Call getRecords
-  .then(response => getRecords(res, options))
+  // Call getRecordsHelper
+  .then(response => getRecordsHelper(res, options))
   .catch(e => console.log("Error: ", e))
 };
 
-// Query Helper
-const query_string = (options, url) => {
+// Query String Helper
+const queryStringHelper = (options, url) => {
 
   let colors = options["colors"] ? options["colors"] : ["red", "brown", "blue", "yellow", "green"];
   let offset = options["page"] ? (options["page"] * 10) - 10 : 0;
@@ -36,14 +36,14 @@ const query_string = (options, url) => {
 };
 
 // Return Records Helper
-const returnRecords = (resList, options) => {
+const returnRecordsHelper = (resList, options) => {
   
-  // Call getRecords and getPages
-  return getPages(resList, options).then(res => getRecords(res, resList, options)).catch(e => console.log("Error: ", e));
+  // Call getRecordsHelper and getPagesHelper
+  return getPagesHelper(resList, options).then(res => getRecordsHelper(res, resList, options)).catch(e => console.log("Error: ", e));
 }
 
 // Get Records Helper
-const getRecords = (recordResults, resList, options) => {
+const getRecordsHelper = (recordResults, resList, options) => {
 
   let ids = [];
   let closed = 0;
@@ -75,7 +75,7 @@ const getRecords = (recordResults, resList, options) => {
 };
 
 // Get Pages Helper
-const getPages = (resList, options) => {
+const getPagesHelper = (resList, options) => {
 
   let colors = options["colors"];
   let currentPage = options["page"] ? options["page"]: 1;
@@ -88,27 +88,28 @@ const getPages = (resList, options) => {
 
   if (currentPage === 1) {
     previous_page = null;
-  // Call getPageNeighbors
+  // Call getPageNeighborsHelper
   } else {
-    previous_page = getPageNeighbors(path,{ page: currentPage - 1, colors: colors}).then(res => page["previous"] = res.length > 0 ? currentPage - 1 : null).catch(e => console.log("Error: ", e));
+    previous_page = getPageNeighborsHelper(path,{ page: currentPage - 1, colors: colors}).then(res => page["previous"] = res.length > 0 ? currentPage - 1 : null).catch(e => console.log("Error: ", e));
   };
 
   if (resList.length < 10) {
     next_page = null
   } else {
-    next_page = getPageNeighbors(path, { page: currentPage + 1, colors: colors}).then(res => page["next"] = res.length > 0 ? currentPage + 1 : null).catch(e => console.log("Error: ", e));
+    next_page = getPageNeighborsHelper(path, { page: currentPage + 1, colors: colors}).then(res => page["next"] = res.length > 0 ? currentPage + 1 : null).catch(e => console.log("Error: ", e));
   }
 
   return Promise.all([previous_page, next_page]).then(res => page).catch(e => console.log("Error: ", e));
 };
 
-// Get neighboring pages helper
-const getPageNeighbors = (path, options) => {
+// getPageNeighborsHelper Helper
+const getPageNeighborsHelper = (path, options) => {
 
   if (options === undefined) {
     options = {};
   };
-  let queryString = query_string(options, path).toString();
+  // Call queryString and queryStringHelper
+  let queryString = queryStringHelper(options, path).toString();
 
   return fetch(queryString).then(res => res.json()).then(res => res).catch(e => console.log("Error: ", e))
 }
