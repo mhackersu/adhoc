@@ -5,6 +5,41 @@ to interact with these APIs and to transform their responses into a format neede
 this homework, we provide a sample API with a single endpoint and ask you to write some JavaScript to request data from
 the API and transform the response.
 
+## Setup
+
+**Requirements:** NodeJS >= 10, [yarn](https://yarnpkg.com/en/docs/install)
+
+- Replace PhantomJS with Chromium. PhantomJS is deprecated - https://phantomjs.org/
+
+```
+npm r phantomjs-prebuilt karma-phantomjs-launcher
+npm i -D karma-chrome-launcher puppeteer
+```
+
+- Configure `./karma.conf.js`
+
+```
+module.exports = function(config) {
+  config.set({
+    // omitted...
+    browsers: ['ChromeHeadless']
+    // omitted...
+  });
+};
+```
+
+- Install necessary Chromium dependancies. [Reference here for necessary libraries on Unix](https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix)
+
+- Debian 10 Dependancies
+
+```
+sudo apt install ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+```
+
+`yarn install` to install.
+
+`yarn test` to run the provided unit tests.
+
 ## Records API
 
 You'll be provided with a `/records` API endpoint that returns a JSON array of items in the following format:
@@ -79,11 +114,3 @@ In `api/managed-records.js`, write a function named `retrieve` that requests dat
 - Don't add any additional libraries or edit any files other than `api/managed-records.js`
 - We've provided a suite of unit tests. Your solution should pass all tests.
 - Please delete the `node_modules` directory before submitting your completed homework.
-
-## Setup
-
-**Requirements:** NodeJS >= 10, [yarn](https://yarnpkg.com/en/docs/install)
-
-`yarn install` to install.
-
-`yarn test` to run the provided unit tests.
